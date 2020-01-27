@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{BCF0FBA8-3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogCollect.Core", "Src\LogCollect.Core\LogCollect.Core.csproj", "{377F2396-B6C6-4D90-958C-5A864B180D9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogCollect.Abstractions", "Src\LogCollect.Abstractions\LogCollect.Abstractions.csproj", "{B9F6AAA4-BBED-4BD8-8B27-C74DFFD1C469}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,12 +21,17 @@ Global
 		{377F2396-B6C6-4D90-958C-5A864B180D9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{377F2396-B6C6-4D90-958C-5A864B180D9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{377F2396-B6C6-4D90-958C-5A864B180D9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9F6AAA4-BBED-4BD8-8B27-C74DFFD1C469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9F6AAA4-BBED-4BD8-8B27-C74DFFD1C469}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9F6AAA4-BBED-4BD8-8B27-C74DFFD1C469}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9F6AAA4-BBED-4BD8-8B27-C74DFFD1C469}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{377F2396-B6C6-4D90-958C-5A864B180D9B} = {6913EF44-CAF0-4A44-B90A-E35AC31772F5}
+		{B9F6AAA4-BBED-4BD8-8B27-C74DFFD1C469} = {6913EF44-CAF0-4A44-B90A-E35AC31772F5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {134385C2-0991-4E52-8D04-05187804663D}
