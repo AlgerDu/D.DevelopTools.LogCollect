@@ -7,9 +7,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{6913EF44-CAF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{BCF0FBA8-3C31-47D9-ABB1-A73838BF65FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogCollect.Core", "Src\LogCollect.Core\LogCollect.Core.csproj", "{377F2396-B6C6-4D90-958C-5A864B180D9B}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{377F2396-B6C6-4D90-958C-5A864B180D9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{377F2396-B6C6-4D90-958C-5A864B180D9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{377F2396-B6C6-4D90-958C-5A864B180D9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{377F2396-B6C6-4D90-958C-5A864B180D9B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{377F2396-B6C6-4D90-958C-5A864B180D9B} = {6913EF44-CAF0-4A44-B90A-E35AC31772F5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {134385C2-0991-4E52-8D04-05187804663D}
