@@ -27,6 +27,10 @@ namespace D.DevelopTools.LogCollect
         /// <returns></returns>
         bool Init(ICollectFilterOptions options);
 
+        bool Run();
+
+        bool Stop();
+
         /// <summary>
         /// 输入，简单这样试试
         /// </summary>
