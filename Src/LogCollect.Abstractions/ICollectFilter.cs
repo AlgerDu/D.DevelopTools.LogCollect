@@ -43,6 +43,6 @@ namespace D.DevelopTools.LogCollect
         /// </summary>
         /// <param name="outputAction"></param>
         /// <returns></returns>
-        bool SetOutput(Action<ICollectContext> outputAction);
+        void SetOutput(Action<ICollectContext> outputAction);
     }
 }
