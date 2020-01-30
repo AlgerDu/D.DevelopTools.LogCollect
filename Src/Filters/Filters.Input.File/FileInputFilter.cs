@@ -6,36 +6,38 @@ using System.Threading.Tasks;
 
 namespace D.DevelopTools.LogCollect.Filters.Input.File
 {
-    public class FileInputFilter : ICollectFilter
+    public class FileInputFilter : BaseCollectFilter, ICollectFilter
     {
-        ILogger _logger;
+        IFileSystemWatcher _watcher;
+        IFileAnalyser _analyser;
 
-        public string ID { get; private set; }
-
-        public string Code => "file-input";
+        public override string Code => "file-input";
 
         public FileInputFilter(
             ILogger<FileInputFilter> logger
-            )
+            ) : base(logger)
         {
-            _logger = logger;
         }
 
-        #region ICollectFilter
-        public bool Init(ICollectFilterOptions options)
+        public override bool Init(ICollectFilterOptions options)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
-        public Task Input(ICollectContext context)
+        public override bool Run()
         {
-            throw new NotImplementedException();
+            _watcher.Run();
+
+            return true;
         }
 
-        public bool SetOutput(Action<ICollectContext> outputAction)
+        public override bool Stop()
         {
-            throw new NotImplementedException();
+            _watcher.Stop();
+
+            return true;
         }
-        #endregion
+
+        private void 
     }
 }

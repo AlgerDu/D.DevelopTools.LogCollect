@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\LogCollect.Abstractions\LogCollect.Abstractions.csproj" />
+    <ProjectReference Include="..\..\LogCollect.Core\LogCollect.Core.csproj" />
   </ItemGroup>
 
 </Project>

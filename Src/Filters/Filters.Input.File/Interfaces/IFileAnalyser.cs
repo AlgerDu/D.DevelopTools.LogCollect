@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D.DevelopTools.LogCollect.Filters.Input.File.Interfaces
+namespace D.DevelopTools.LogCollect.Filters.Input.File
 {
     /// <summary>
     /// 文件分析
