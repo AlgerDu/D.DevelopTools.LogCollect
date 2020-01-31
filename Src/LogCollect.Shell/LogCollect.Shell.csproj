@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>D.DevelopTools.LogCollect.Shell</AssemblyName>
+    <RootNamespace>D.DevelopTools.LogCollect</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="5.0.0" />
+    <PackageReference Include="D.Infrastructures.Application" Version="3.0.0" />
+  </ItemGroup>
 
 </Project>
