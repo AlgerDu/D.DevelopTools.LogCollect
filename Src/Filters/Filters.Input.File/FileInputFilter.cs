@@ -37,7 +37,5 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
 
             return true;
         }
-
-        private void 
     }
 }
