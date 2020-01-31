@@ -119,14 +119,11 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
 
         private void FindFile(DirectoryInfo parent)
         {
-            var files = parent.GetFiles();
+            var files = parent.GetFiles(_watcher.Filter);
 
             foreach (var f in files)
             {
-                if (f.Extension == _fileExtension)
-                {
-                    CheckFile(new DFile(f));
-                }
+                CheckFile(new DFile(f));
             }
 
             var directories = parent.GetDirectories();
