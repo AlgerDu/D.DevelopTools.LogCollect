@@ -17,4 +17,14 @@
     <ProjectReference Include="..\LogCollect.Shell\LogCollect.Shell.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy '$(ProjectDir)..\..\Items\Configs' '$(ProjectDir)$(OutputPath)Configs\' /s /e /y" />
+  </Target>
+
 </Project>
