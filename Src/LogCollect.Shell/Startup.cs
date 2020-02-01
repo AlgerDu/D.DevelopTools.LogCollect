@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using D.DevelopTools.LogCollect.Filters;
 using D.Infrastructures;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,10 +33,12 @@ namespace D.DevelopTools.LogCollect
 
         public void ConfigServices(IServiceCollection services)
         {
+            services.AddSingleton<ICollectFilterProvider, FileInputCollectFilterProvider>();
         }
 
         public void ConfigServices(ContainerBuilder builder)
         {
+            builder.AddLogCollectCore();
         }
     }
 }
