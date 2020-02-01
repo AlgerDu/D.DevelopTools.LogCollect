@@ -16,5 +16,7 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
         public string Pattern { get; set; }
 
         public string What { get; set; }
+
+        public int SpecialLines { get; set; }
     }
 }

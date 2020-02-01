@@ -10,19 +10,33 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
     {
         public const string CCode = "file-input";
 
+        ILoggerFactory _loggerFactory;
+
         IFileSystemWatcher _watcher;
         IFileAnalyser _analyser;
+
+        FileInputFilterOptions _options;
 
         public override string Code => "file-input";
 
         public FileInputFilter(
-            ILogger<FileInputFilter> logger
-            ) : base(logger)
+            ILoggerFactory loggerFactory
+            ) : base(loggerFactory.CreateLogger<FileInputFilter>())
         {
+            _loggerFactory = loggerFactory;
         }
 
         public override bool Init(ICollectFilterOptions options)
         {
+            _options = options.ConvertTo<FileInputFilterOptions>();
+
+            _watcher = new DFileSystemWatcher(_loggerFactory.CreateLogger<DFileSystemWatcher>(), _options);
+
+            _watcher.SetFileChangeAction((file) =>
+            {
+
+            });
+
             return true;
         }
 
