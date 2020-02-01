@@ -8,6 +8,8 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
 {
     public class FileInputFilter : BaseCollectFilter, ICollectFilter
     {
+        public const string CCode = "file-input";
+
         IFileSystemWatcher _watcher;
         IFileAnalyser _analyser;
 
