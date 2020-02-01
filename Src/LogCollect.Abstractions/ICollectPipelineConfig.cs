@@ -9,5 +9,10 @@ namespace D.DevelopTools.LogCollect
     /// </summary>
     public interface ICollectPipelineConfig
     {
+        /// <summary>
+        /// 配置的所有过滤器；
+        /// 按照顺序
+        /// </summary>
+        IList<ICollectFilterOptions> FilterOptions { get; }
     }
 }
