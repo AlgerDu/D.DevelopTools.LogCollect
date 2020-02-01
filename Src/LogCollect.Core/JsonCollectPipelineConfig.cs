@@ -25,7 +25,7 @@ namespace D.DevelopTools.LogCollect
             var tmp = _root.First;
             while (tmp != null)
             {
-                _filterOptions.Add(new JsonCollectFilterOptions(tmp, tmp.Path));
+                _filterOptions.Add(new JsonCollectFilterOptions(_root[tmp.Path], tmp.Path));
 
                 tmp = tmp.Next;
             }
