@@ -55,5 +55,10 @@ namespace D.DevelopTools.LogCollect
                 return true;
             }
         }
+
+        public override string ToString()
+        {
+            return _root.ToString();
+        }
     }
 }
