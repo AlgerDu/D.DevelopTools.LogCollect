@@ -31,10 +31,16 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
             _options = options.ConvertTo<FileInputFilterOptions>();
 
             _watcher = new DFileSystemWatcher(_loggerFactory.CreateLogger<DFileSystemWatcher>(), _options);
+            _analyser = new FileAnalyser(_loggerFactory.CreateLogger<FileAnalyser>(), _options);
 
             _watcher.SetFileChangeAction((file) =>
             {
+                _analyser.Analyse(file);
+            });
 
+            _analyser.SetDealContextAction((collectContext) =>
+            {
+                _output(collectContext);
             });
 
             return true;

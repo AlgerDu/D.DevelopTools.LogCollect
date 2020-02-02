@@ -9,5 +9,8 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
     /// </summary>
     internal interface IDFile
     {
+        string FullPath { get; }
+
+        string Name { get; }
     }
 }

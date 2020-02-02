@@ -14,6 +14,10 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
             _info = info;
         }
 
+        public string FullPath => _info.FullName;
+
+        public string Name => _info.Name;
+
         public override string ToString()
         {
             return $"File[{_info.FullName}]";
