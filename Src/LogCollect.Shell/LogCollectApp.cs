@@ -36,6 +36,11 @@ namespace D.DevelopTools.LogCollect
 
             var filter = _filterFactory.Create(config.FilterOptions[0].FilterCode);
 
+            filter.SetOutput((context) =>
+            {
+                _logger.LogDebug(context.Fields.ToString());
+            });
+
             filter.Init(config.FilterOptions[0]);
             filter.Run();
 
