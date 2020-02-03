@@ -49,9 +49,11 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
                             context.Fields["path"] = file.FullPath;
                         }
 
+                        line = line.TrimStart();
+
                         if (index <= _options.Mulitline.SpecialLines)
                         {
-                            context.Fields[$"line{index}"] = line.TrimStart();
+                            context.Fields[$"line{index}"] = line;
 
                             index++;
                         }
