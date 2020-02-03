@@ -34,6 +34,7 @@ namespace D.DevelopTools.LogCollect
         public void ConfigServices(IServiceCollection services)
         {
             services.AddSingleton<ICollectFilterProvider, FileInputCollectFilterProvider>();
+            services.AddSingleton<ICollectFilterProvider, RegexFilterProvider>();
         }
 
         public void ConfigServices(ContainerBuilder builder)

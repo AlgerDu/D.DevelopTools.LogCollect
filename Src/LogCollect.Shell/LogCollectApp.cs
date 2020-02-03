@@ -34,15 +34,23 @@ namespace D.DevelopTools.LogCollect
 
             var config = new JsonCollectPipelineConfig(json);
 
-            var filter = _filterFactory.Create(config.FilterOptions[0].FilterCode);
+            var fileInput = _filterFactory.Create(config.FilterOptions[0].FilterCode);
+            var regex = _filterFactory.Create(config.FilterOptions[1].FilterCode);
 
-            filter.SetOutput((context) =>
+            fileInput.SetOutput((context) =>
+            {
+                regex.Input(context);
+            });
+
+            regex.SetOutput((context) =>
             {
                 _logger.LogDebug(context.Fields.ToString());
             });
 
-            filter.Init(config.FilterOptions[0]);
-            filter.Run();
+            fileInput.Init(config.FilterOptions[0]);
+            regex.Init(config.FilterOptions[1]);
+
+            fileInput.Run();
 
             _logger.LogInformation($"{this} is running");
             return this;
