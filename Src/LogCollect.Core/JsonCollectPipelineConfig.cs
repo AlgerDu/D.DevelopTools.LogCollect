@@ -53,5 +53,10 @@ namespace D.DevelopTools.LogCollect
         {
             return _jToken.ToObject<T>();
         }
+
+        public override string ToString()
+        {
+            return _jToken.ToString();
+        }
     }
 }
