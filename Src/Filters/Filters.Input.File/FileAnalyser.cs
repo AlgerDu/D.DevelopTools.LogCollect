@@ -51,7 +51,7 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
 
                         if (index <= _options.Mulitline.SpecialLines)
                         {
-                            context.Fields[$"line{index}"] = line;
+                            context.Fields[$"line{index}"] = line.TrimStart();
 
                             index++;
                         }
