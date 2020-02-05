@@ -32,10 +32,6 @@
             "esindex": "product env project",
             "estype": "basefilename instanceid"
         },
-        "remove": [
-            "line1",
-            "line2"
-        ],
         "rename": {
             "message": "logmessage"
         }
