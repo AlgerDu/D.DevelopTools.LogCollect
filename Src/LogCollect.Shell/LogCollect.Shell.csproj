@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Filters\Filters.Input.File\Filters.Input.File.csproj" />
     <ProjectReference Include="..\Filters\Filters.Regex\Filters.Regex.csproj" />
+    <ProjectReference Include="..\Filters\Filters.TidyFields\Filters.TidyFields.csproj" />
     <ProjectReference Include="..\LogCollect.Abstractions\LogCollect.Abstractions.csproj" />
     <ProjectReference Include="..\LogCollect.Core\LogCollect.Core.csproj" />
   </ItemGroup>
