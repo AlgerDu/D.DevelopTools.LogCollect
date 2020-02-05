@@ -64,9 +64,18 @@ namespace D.DevelopTools.LogCollect.Filters.DRegex
                     }
                     else
                     {
-                        var gs = Regex.Match(src, o.Pattern).Groups;
+                        var match = Regex.Match(src, o.Pattern);
 
-                        context.Fields[o.DstField] = gs[gs.Count - 1].Value;
+                        if (match.Success)
+                        {
+                            var gs = match.Groups;
+
+                            context.Fields[o.DstField] = gs[gs.Count - 1].Value;
+                        }
+                        else
+                        {
+                            context.Fields[o.DstField] = "";
+                        }
                     }
                 }
 
