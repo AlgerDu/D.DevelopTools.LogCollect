@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Regex", "Test\Test.Reg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filters.TidyFields", "Src\Filters\Filters.TidyFields\Filters.TidyFields.csproj", "{4859904C-D209-4043-A940-C08070A68E11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filter.Output.Elasticsearch", "Src\Filters\Filter.Output.Elasticsearch\Filter.Output.Elasticsearch.csproj", "{FD4B57EA-D87F-41DB-A6B5-A33EAF47AC0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{4859904C-D209-4043-A940-C08070A68E11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4859904C-D209-4043-A940-C08070A68E11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4859904C-D209-4043-A940-C08070A68E11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD4B57EA-D87F-41DB-A6B5-A33EAF47AC0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD4B57EA-D87F-41DB-A6B5-A33EAF47AC0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD4B57EA-D87F-41DB-A6B5-A33EAF47AC0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD4B57EA-D87F-41DB-A6B5-A33EAF47AC0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{ED5F74BE-BF3F-4413-BA38-68F592B864BA} = {F1EF9653-CF0A-40E5-B1C2-38CCAC4F82D8}
 		{0A7E250D-29EF-46E9-9FB0-938D219A6CFD} = {BCF0FBA8-3C31-47D9-ABB1-A73838BF65FC}
 		{4859904C-D209-4043-A940-C08070A68E11} = {F1EF9653-CF0A-40E5-B1C2-38CCAC4F82D8}
+		{FD4B57EA-D87F-41DB-A6B5-A33EAF47AC0E} = {F1EF9653-CF0A-40E5-B1C2-38CCAC4F82D8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {134385C2-0991-4E52-8D04-05187804663D}
