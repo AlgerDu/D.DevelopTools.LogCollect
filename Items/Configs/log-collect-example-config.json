@@ -19,9 +19,19 @@
         "line2": {
             "logcatoage": "^[^\\s,\\[]+",
             "callsiteline": "\\[([0-9]{1,6})\\]"
+        },
+        "path": {
+            "product": "vps",
+            "env": "\\\\(test|dev|pro)\\\\",
+            "project": "\\\\(test|dev|pro)\\\\([\\S]+)\\\\",
+            "instanceid": "[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}"
         }
     },
     "tidy-fields": {
+        "combine": {
+            "esindex": "product env project",
+            "estype": "basefilename instanceid"
+        },
         "remove": [
             "line1",
             "line2"
@@ -30,5 +40,17 @@
             "message": "logmessage"
         }
     },
-    "elasticsearch-output": {}
+    "elasticsearch-output": {
+        "host": "172.17.204.227:9200",
+        "index": "esindex",
+        "type": "estype",
+        "fields": [
+            "loglevel",
+            "logtimestamp",
+            "threadid",
+            "logcatoage",
+            "callsiteline",
+            "logmessage"
+        ]
+    }
 }
