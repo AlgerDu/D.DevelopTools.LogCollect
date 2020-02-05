@@ -47,6 +47,7 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
                             index = 1;
 
                             context.Fields["path"] = file.FullPath;
+                            context.Fields["basefilename"] = file.Name.Split('.')[0].ToLower();
                         }
 
                         line = line.TrimStart();
