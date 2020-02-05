@@ -36,6 +36,7 @@ namespace D.DevelopTools.LogCollect
 
             var fileInput = _filterFactory.Create(config.FilterOptions[0].FilterCode);
             var regex = _filterFactory.Create(config.FilterOptions[1].FilterCode);
+            var tidy = _filterFactory.Create(config.FilterOptions[2].FilterCode);
 
             fileInput.SetOutput((context) =>
             {
@@ -44,11 +45,17 @@ namespace D.DevelopTools.LogCollect
 
             regex.SetOutput((context) =>
             {
+                tidy.Input(context);
+            });
+
+            tidy.SetOutput((context) =>
+            {
                 _logger.LogDebug(context.Fields.ToString());
             });
 
             fileInput.Init(config.FilterOptions[0]);
             regex.Init(config.FilterOptions[1]);
+            tidy.Init(config.FilterOptions[2]);
 
             fileInput.Run();
 
