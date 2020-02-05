@@ -37,8 +37,8 @@ namespace D.DevelopTools.LogCollect.Filters.TidyFields
                 {
                     var fo = new TidyOptions();
                     fo.Type = p.Path;
-                    fo.SrcField = p.Path;
-                    fo.DstField = c.Value.ToString();
+                    fo.DstField = c.Name;
+                    fo.SrcField = c.Value.ToString();
 
                     _tidyFields.Add(fo);
                 }
@@ -84,14 +84,19 @@ namespace D.DevelopTools.LogCollect.Filters.TidyFields
                 }
             }
 
-            context.Fields[options.DstField] = dstValue.Remove(dstValue.Length - 1, 1);
+            if (dstValue.Length > 1)
+            {
+                dstValue = dstValue.Remove(dstValue.Length - 1, 1);
+            }
+
+            context.Fields[options.DstField] = dstValue;
         }
 
         private void RenameField(ICollectContext context, TidyOptions options)
         {
-            context.Fields[options.DstField] = context.Fields[options.SrcField];
+            context.Fields[options.SrcField] = context.Fields[options.DstField];
 
-            context.Fields.Remove(options.SrcField);
+            context.Fields.Remove(options.DstField);
         }
     }
 }
