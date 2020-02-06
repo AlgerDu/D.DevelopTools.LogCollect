@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Filters\Filter.Output.Elasticsearch\Filter.Output.Elasticsearch.csproj" />
     <ProjectReference Include="..\Filters\Filters.Input.File\Filters.Input.File.csproj" />
     <ProjectReference Include="..\Filters\Filters.Regex\Filters.Regex.csproj" />
     <ProjectReference Include="..\Filters\Filters.TidyFields\Filters.TidyFields.csproj" />

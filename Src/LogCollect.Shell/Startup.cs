@@ -36,6 +36,7 @@ namespace D.DevelopTools.LogCollect
             services.AddSingleton<ICollectFilterProvider, FileInputCollectFilterProvider>();
             services.AddSingleton<ICollectFilterProvider, RegexFilterProvider>();
             services.AddSingleton<ICollectFilterProvider, TidyFieldsProvider>();
+            services.AddSingleton<ICollectFilterProvider, ElasticsearchOutputFilterProvider>();
         }
 
         public void ConfigServices(ContainerBuilder builder)
