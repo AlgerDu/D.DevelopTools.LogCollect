@@ -6,4 +6,9 @@
     <RootNamespace>D.DevelopTools.LogCollect.Filters.Output.Elasticsearch</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\LogCollect.Abstractions\LogCollect.Abstractions.csproj" />
+    <ProjectReference Include="..\..\LogCollect.Core\LogCollect.Core.csproj" />
+  </ItemGroup>
+
 </Project>
