@@ -41,18 +41,23 @@ namespace D.DevelopTools.LogCollect
 
             fileInput.SetOutput((context) =>
             {
-                regex.Input(context);
+                return regex.Input(context);
             });
 
             regex.SetOutput((context) =>
             {
-                tidy.Input(context);
+                return tidy.Input(context);
             });
 
             tidy.SetOutput((context) =>
             {
                 //_logger.LogInformation(context.Fields.ToString());
-                es.Input(context);
+                return es.Input(context);
+            });
+
+            es.SetEmpty((filter) =>
+            {
+                fileInput.Pause();
             });
 
             fileInput.Init(config.FilterOptions[0]);
