@@ -94,6 +94,11 @@ namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
                     {
                         if (_queue.Count > 0)
                             context = _queue.Dequeue();
+
+                        if (_queue.Count < 200)
+                        {
+                            Task.Run(() => this.NotiifyPipelineEmpty());
+                        }
                     }
 
                     if (context != null)
