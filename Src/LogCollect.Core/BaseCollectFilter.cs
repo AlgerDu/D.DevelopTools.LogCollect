@@ -8,10 +8,14 @@ namespace D.DevelopTools.LogCollect
 {
     public abstract class BaseCollectFilter : ICollectFilter
     {
+        private FilterState _state;
+
         protected ILogger _logger;
 
         protected Func<ICollectContext, bool> _output;
         protected Action<ICollectFilter> _empty;
+
+        protected FilterState State => _state;
 
         #region ICollectFilter
         public string ID { get; protected set; }
@@ -26,6 +30,7 @@ namespace D.DevelopTools.LogCollect
             _logger = logger;
 
             ID = Guid.NewGuid().ToString();
+            _state = FilterState.Stop;
         }
 
         #region ICollectFilter
@@ -34,19 +39,79 @@ namespace D.DevelopTools.LogCollect
             return true;
         }
 
-        public virtual bool Run()
+        public bool Run()
         {
-            return true;
+            lock (this)
+            {
+                var isSuccess = true;
+
+                switch (_state)
+                {
+                    case FilterState.Stop:
+                        isSuccess = StopToRun();
+                        break;
+
+                    case FilterState.Pause:
+                        isSuccess = PauseToRun();
+                        break;
+
+                    default:
+                        break;
+                }
+
+                if (isSuccess) _state = FilterState.Running;
+
+                return isSuccess;
+            }
         }
 
-        public virtual bool Pause()
+        public bool Pause()
         {
-            return true;
+            lock (this)
+            {
+                var isSuccess = true;
+
+                switch (_state)
+                {
+                    case FilterState.Running:
+                        isSuccess = RunToPause();
+                        break;
+
+                    case FilterState.Stop:
+                        isSuccess = false;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                if (isSuccess) _state = FilterState.Pause;
+
+                return isSuccess;
+            }
         }
 
-        public virtual bool Stop()
+        public bool Stop()
         {
-            return true;
+            lock (this)
+            {
+                var isSuccess = true;
+
+                switch (_state)
+                {
+                    case FilterState.Stop:
+                        isSuccess = false;
+                        break;
+
+                    default:
+                        isSuccess = TryToStop();
+                        break;
+                }
+
+                _state = FilterState.Stop;
+
+                return isSuccess;
+            }
         }
 
         public virtual bool Input(ICollectContext context)
@@ -63,6 +128,26 @@ namespace D.DevelopTools.LogCollect
             _empty = emptyAction;
         }
         #endregion
+
+        protected virtual bool StopToRun()
+        {
+            return true;
+        }
+
+        protected virtual bool TryToStop()
+        {
+            return true;
+        }
+
+        protected virtual bool RunToPause()
+        {
+            return true;
+        }
+
+        protected virtual bool PauseToRun()
+        {
+            return true;
+        }
 
         protected bool OutputContext(ICollectContext context)
         {
