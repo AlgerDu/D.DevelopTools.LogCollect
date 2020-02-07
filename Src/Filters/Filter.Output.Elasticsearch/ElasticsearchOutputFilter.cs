@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
@@ -15,6 +16,12 @@ namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
         ElasticsearchOutputFilterOptions _options;
         HttpClient _http;
 
+        Queue<ICollectContext> _queue;
+
+        ManualResetEvent mre_addContext;
+
+        bool _isRunning;
+
         public override string Code => CCode;
 
         public ElasticsearchOutputFilter(
@@ -22,6 +29,9 @@ namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
             ) : base(logger)
         {
             _http = new HttpClient();
+
+            _queue = new Queue<ICollectContext>(500);
+            mre_addContext = new ManualResetEvent(false);
         }
 
         public override bool Init(ICollectFilterOptions options)
@@ -31,36 +41,106 @@ namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
             return true;
         }
 
-        public override Task Input(ICollectContext context)
+        protected override bool StopToRun()
         {
-            return Task.Run(() =>
+            StartSendingThread();
+            return true;
+        }
+
+        protected override bool PauseToRun()
+        {
+            StartSendingThread();
+            return true;
+        }
+
+        protected override bool RunToPause()
+        {
+            mre_addContext.WaitOne();
+            return true;
+        }
+
+        protected override bool TryToStop()
+        {
+            mre_addContext.WaitOne();
+
+            return true;
+        }
+
+        public override bool Input(ICollectContext context)
+        {
+            lock (this)
             {
-                var body = new JObject();
-
-                foreach (var f in _options.Fields)
+                if (_queue.Count == 500)
                 {
-                    body[f] = context.Fields[f];
+                    return false;
                 }
 
-                var index = context.Fields[_options.Index];
-                var type = context.Fields[_options.Type].Replace('.','_');
-                var url = $"http://{_options.Host}/logcollect_{index}/{type}";
+                _queue.Enqueue(context);
+                mre_addContext.Set();
 
-                var content = new StringContent(body.ToString());
-                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                return true;
+            }
+        }
 
-                try
+        private void StartSendingThread()
+        {
+            Task.Run(() =>
+            {
+                while (State == FilterState.Running)
                 {
-                    _http.PostAsync(url, content).ContinueWith((t) =>
+                    ICollectContext context = null;
+
+                    lock (this)
                     {
-                        _logger.LogInformation($"{index} {t.Result.StatusCode}");
-                    });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogWarning($"{ex}");
+                        if (_queue.Count > 0)
+                            context = _queue.Dequeue();
+                    }
+
+                    if (context != null)
+                    {
+                        SendContext(context);
+                    }
+
+                    if (context == null)
+                    {
+                        mre_addContext.WaitOne();
+                    }
                 }
             });
+        }
+
+        private void SendContext(ICollectContext context)
+        {
+            var body = new JObject();
+
+            foreach (var f in _options.Fields)
+            {
+                body[f] = context.Fields[f];
+            }
+
+            var index = context.Fields[_options.Index];
+            var type = context.Fields[_options.Type].Replace('.', '_');
+            var url = $"http://{_options.Host}/logcollect_{index}/{type}";
+
+            var content = new StringContent(body.ToString());
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            try
+            {
+                _http.PostAsync(url, content).ContinueWith((t) =>
+                {
+                    var rsp = t.Result;
+
+                    _logger.LogInformation($"{index} {(int)rsp.StatusCode}");
+
+                    _logger.LogDebug($"{rsp.RequestMessage.Headers.ToString()}");
+                    _logger.LogDebug($"{rsp.Headers.ToString()}");
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"{ex}");
+            }
         }
     }
 }
