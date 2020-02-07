@@ -10,12 +10,16 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
     /// </summary>
     internal interface IFileAnalyser
     {
+        bool Pause();
+
+        bool Stop();
+
         /// <summary>
         /// 分析文件
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        Task Analyse(IDFile file);
+        void Analyse(IDFile file);
 
         /// <summary>
         /// 设置处理分析出来的上下文的 action

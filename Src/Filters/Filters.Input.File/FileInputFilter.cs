@@ -46,17 +46,28 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
             return true;
         }
 
-        public override bool Run()
+        protected override bool StopToRun()
         {
             _watcher.Run();
-
             return true;
         }
 
-        public override bool Stop()
+        protected override bool PauseToRun()
         {
-            _watcher.Stop();
+            _analyser.Pause();
+            return true;
+        }
 
+        protected override bool RunToPause()
+        {
+            _analyser.Pause();
+            return true;
+        }
+
+        protected override bool TryToStop()
+        {
+            _analyser.Stop();
+            _watcher.Stop();
             return true;
         }
     }
