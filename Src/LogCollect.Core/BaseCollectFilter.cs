@@ -10,7 +10,8 @@ namespace D.DevelopTools.LogCollect
     {
         protected ILogger _logger;
 
-        protected Action<ICollectContext> _output;
+        protected Func<ICollectContext, bool> _output;
+        protected Action<ICollectFilter> _empty;
 
         #region ICollectFilter
         public string ID { get; protected set; }
@@ -35,23 +36,42 @@ namespace D.DevelopTools.LogCollect
 
         public virtual bool Run()
         {
-            throw new NotImplementedException();
+            return true;
+        }
+
+        public virtual bool Pause()
+        {
+            return true;
         }
 
         public virtual bool Stop()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
-        public virtual Task Input(ICollectContext context)
+        public virtual bool Input(ICollectContext context)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
-        public void SetOutput(Action<ICollectContext> outputAction)
+        public void SetOutput(Func<ICollectContext, bool> outputAction)
         {
             _output = outputAction;
         }
+        public void SetEmpty(Action<ICollectFilter> emptyAction)
+        {
+            _empty = emptyAction;
+        }
         #endregion
+
+        protected bool OutputContext(ICollectContext context)
+        {
+            return _output(context);
+        }
+
+        protected void NotiifyPipelineEmpty()
+        {
+            _empty(this);
+        }
     }
 }
