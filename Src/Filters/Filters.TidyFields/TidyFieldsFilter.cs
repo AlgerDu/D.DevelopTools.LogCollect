@@ -49,24 +49,21 @@ namespace D.DevelopTools.LogCollect.Filters.TidyFields
             return true;
         }
 
-        public override Task Input(ICollectContext context)
+        public override bool Input(ICollectContext context)
         {
-            return Task.Run(() =>
+            foreach (var to in _tidyFields)
             {
-                foreach (var to in _tidyFields)
+                if (to.Type == "combine")
                 {
-                    if (to.Type == "combine")
-                    {
-                        CombineField(context, to);
-                    }
-                    else if (to.Type == "rename")
-                    {
-                        RenameField(context, to);
-                    }
+                    CombineField(context, to);
                 }
+                else if (to.Type == "rename")
+                {
+                    RenameField(context, to);
+                }
+            }
 
-                _output(context);
-            });
+            return OutputContext(context);
         }
 
         private void CombineField(ICollectContext context, TidyOptions options)
