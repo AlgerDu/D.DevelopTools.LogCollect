@@ -40,7 +40,10 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
 
             _analyser.SetDealContextAction((collectContext) =>
             {
-                _output(collectContext);
+                if (!OutputContext(collectContext))
+                {
+                    this.Pause();
+                }
             });
 
             return true;

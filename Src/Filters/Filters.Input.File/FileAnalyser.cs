@@ -35,6 +35,8 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
             mre_addFile = new ManualResetEvent(false);
 
             _isPause = false;
+
+            AnyThresd();
         }
 
 
