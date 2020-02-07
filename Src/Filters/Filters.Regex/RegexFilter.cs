@@ -50,37 +50,34 @@ namespace D.DevelopTools.LogCollect.Filters.DRegex
             return true;
         }
 
-        public override Task Input(ICollectContext context)
+        public override bool Input(ICollectContext context)
         {
-            return Task.Run(() =>
+            foreach (var o in _fieldOptions)
             {
-                foreach (var o in _fieldOptions)
-                {
-                    var src = context.Fields[o.SrcField];
+                var src = context.Fields[o.SrcField];
 
-                    if (string.IsNullOrEmpty(src))
+                if (string.IsNullOrEmpty(src))
+                {
+                    context.Fields[o.DstField] = "";
+                }
+                else
+                {
+                    var match = Regex.Match(src, o.Pattern);
+
+                    if (match.Success)
                     {
-                        context.Fields[o.DstField] = "";
+                        var gs = match.Groups;
+
+                        context.Fields[o.DstField] = gs[gs.Count - 1].Value;
                     }
                     else
                     {
-                        var match = Regex.Match(src, o.Pattern);
-
-                        if (match.Success)
-                        {
-                            var gs = match.Groups;
-
-                            context.Fields[o.DstField] = gs[gs.Count - 1].Value;
-                        }
-                        else
-                        {
-                            context.Fields[o.DstField] = "";
-                        }
+                        context.Fields[o.DstField] = "";
                     }
                 }
+            }
 
-                _output(context);
-            });
+            return OutputContext(context);
         }
     }
 }
