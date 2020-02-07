@@ -45,7 +45,7 @@ namespace D.DevelopTools.LogCollect
         /// </summary>
         /// <param name="outputAction"></param>
         /// <returns></returns>
-        void SetOutput(Func<bool, ICollectContext> outputAction);
+        void SetOutput(Func<ICollectContext, bool> outputAction);
 
         /// <summary>
         /// 设置已空的处理
