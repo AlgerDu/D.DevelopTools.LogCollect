@@ -51,6 +51,7 @@ namespace D.DevelopTools.LogCollect
 
             tidy.SetOutput((context) =>
             {
+                //_logger.LogInformation(context.Fields.ToString());
                 es.Input(context);
             });
 
