@@ -43,14 +43,18 @@ namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
                 }
 
                 var index = context.Fields[_options.Index];
-                var type = context.Fields[_options.Type];
+                var type = context.Fields[_options.Type].Replace('.','_');
+                var url = $"http://{_options.Host}/logcollect_{index}/{type}";
 
                 var content = new StringContent(body.ToString());
                 content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
                 try
                 {
-                    _http.PostAsync($"http://{_options.Host}/{index}/{type}", content);
+                    _http.PostAsync(url, content).ContinueWith((t) =>
+                    {
+                        _logger.LogInformation($"{index} {t.Result.StatusCode}");
+                    });
                 }
                 catch (Exception ex)
                 {
