@@ -29,20 +29,28 @@ namespace D.DevelopTools.LogCollect
 
         bool Run();
 
+        bool Pause();
+
         bool Stop();
 
         /// <summary>
         /// 输入，简单这样试试
         /// </summary>
         /// <param name="context"></param>
-        /// <returns></returns>
-        Task Input(ICollectContext context);
+        /// <returns>false 代表输入失败，被卡住了，暂时这样吧</returns>
+        bool Input(ICollectContext context);
 
         /// <summary>
         /// 设置输出，简单这样试试
         /// </summary>
         /// <param name="outputAction"></param>
         /// <returns></returns>
-        void SetOutput(Action<ICollectContext> outputAction);
+        void SetOutput(Func<bool, ICollectContext> outputAction);
+
+        /// <summary>
+        /// 设置已空的处理
+        /// </summary>
+        /// <param name="emptyAction"></param>
+        void SetEmpty(Action<ICollectFilter> emptyAction);
     }
 }
