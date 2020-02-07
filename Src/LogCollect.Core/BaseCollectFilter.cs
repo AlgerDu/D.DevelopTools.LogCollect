@@ -45,6 +45,9 @@ namespace D.DevelopTools.LogCollect
             {
                 var isSuccess = true;
 
+                var old = _state;
+                _state = FilterState.Running;
+
                 switch (_state)
                 {
                     case FilterState.Stop:
@@ -59,7 +62,7 @@ namespace D.DevelopTools.LogCollect
                         break;
                 }
 
-                if (isSuccess) _state = FilterState.Running;
+                if (!isSuccess) _state = old;
 
                 return isSuccess;
             }
@@ -70,6 +73,9 @@ namespace D.DevelopTools.LogCollect
             lock (this)
             {
                 var isSuccess = true;
+
+                var old = _state;
+                _state = FilterState.Pause;
 
                 switch (_state)
                 {
@@ -85,7 +91,7 @@ namespace D.DevelopTools.LogCollect
                         break;
                 }
 
-                if (isSuccess) _state = FilterState.Pause;
+                if (!isSuccess) _state = old;
 
                 return isSuccess;
             }
@@ -97,6 +103,8 @@ namespace D.DevelopTools.LogCollect
             {
                 var isSuccess = true;
 
+                _state = FilterState.Stop;
+
                 switch (_state)
                 {
                     case FilterState.Stop:
@@ -107,8 +115,6 @@ namespace D.DevelopTools.LogCollect
                         isSuccess = TryToStop();
                         break;
                 }
-
-                _state = FilterState.Stop;
 
                 return isSuccess;
             }
