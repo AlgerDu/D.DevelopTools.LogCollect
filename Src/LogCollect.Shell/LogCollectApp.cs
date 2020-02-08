@@ -52,12 +52,13 @@ namespace D.DevelopTools.LogCollect
             tidy.SetOutput((context) =>
             {
                 //_logger.LogInformation(context.Fields.ToString());
+                //return true;
                 return es.Input(context);
             });
 
             es.SetEmpty((filter) =>
             {
-                fileInput.Pause();
+                fileInput.Run();
             });
 
             fileInput.Init(config.FilterOptions[0]);
@@ -65,6 +66,7 @@ namespace D.DevelopTools.LogCollect
             tidy.Init(config.FilterOptions[2]);
             es.Init(config.FilterOptions[3]);
 
+            es.Run();
             fileInput.Run();
 
             _logger.LogInformation($"{this} is running");
