@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
+using NLog;
+using NLog.Extensions.Logging;
 
 namespace D.DevelopTools.LogCollect
 {
@@ -20,6 +22,7 @@ namespace D.DevelopTools.LogCollect
                 {
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     logging.AddConsole();
+                    logging.AddNLog();
                 })
                 .UseStartupWithAutofac<Startup>()
                 .Builde<LogCollectApp>();
