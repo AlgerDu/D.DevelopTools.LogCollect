@@ -37,7 +37,7 @@
         }
     },
     "elasticsearch-output": {
-        "host": "172.18.97.34:9200",
+        "host": "192.168.101.110:9200",
         "index": "esindex",
         "type": "estype",
         "fields": [
