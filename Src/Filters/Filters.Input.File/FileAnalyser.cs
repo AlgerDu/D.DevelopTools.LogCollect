@@ -31,10 +31,11 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
             _logger = logger;
             _options = options;
 
-            mre_pauseToStart = new ManualResetEvent(false);
+            mre_pauseToStart = new ManualResetEvent(true);
             mre_addFile = new ManualResetEvent(false);
 
             _isPause = false;
+            _queue = new Queue<IDFile>();
 
             AnyThresd();
         }
@@ -70,6 +71,7 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
         {
             lock (this)
             {
+                _logger.LogInformation($"{file} 加入待处理队列");
                 _queue.Enqueue(file);
                 mre_addFile.Set();
             }
@@ -81,57 +83,63 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
             {
                 IDFile file = null;
 
-                lock (this)
+                while (true)
                 {
-                    if (_queue.Count > 0)
-                        file = _queue.Dequeue();
-                }
-
-                if (file != null)
-                {
-                    using (var sr = new StreamReader(file.FullPath))
+                    lock (this)
                     {
-                        var line = "";
-                        var index = 1;
-                        var message = "";
+                        if (_queue.Count > 0)
+                            file = _queue.Dequeue();
+                    }
 
-                        var context = new CollectContext();
+                    if (file != null)
+                    {
+                        _logger.LogInformation($"开始处理 {file}");
 
-                        while ((line = sr.ReadLine()) != null)
+                        using (var sr = new StreamReader(file.FullPath))
                         {
-                            if (!Regex.IsMatch(line, _options.Mulitline.Pattern))
+                            var line = "";
+                            var index = 1;
+                            var message = "";
+
+                            var context = new CollectContext();
+
+                            while ((line = sr.ReadLine()) != null)
                             {
-                                context.Fields["message"] = message;
-                                _dealContext(context);
+                                if (!Regex.IsMatch(line, _options.Mulitline.Pattern))
+                                {
+                                    context.Fields["message"] = message;
+                                    _dealContext(context);
 
-                                context = new CollectContext();
-                                index = 1;
+                                    context = new CollectContext();
+                                    index = 1;
+                                    message = "";
 
-                                context.Fields["path"] = file.FullPath;
-                                context.Fields["basefilename"] = file.Name.Split('.')[0].ToLower();
+                                    context.Fields["path"] = file.FullPath;
+                                    context.Fields["basefilename"] = file.Name.Split('.')[0].ToLower();
+                                }
+
+                                line = line.TrimStart();
+
+                                if (index <= _options.Mulitline.SpecialLines)
+                                {
+                                    context.Fields[$"line{index}"] = line;
+
+                                    index++;
+                                }
+                                else
+                                {
+                                    message += line + "\r\n";
+                                }
+
+                                mre_pauseToStart.WaitOne();
                             }
-
-                            line = line.TrimStart();
-
-                            if (index <= _options.Mulitline.SpecialLines)
-                            {
-                                context.Fields[$"line{index}"] = line;
-
-                                index++;
-                            }
-                            else
-                            {
-                                message += line + "\r\n";
-                            }
-
-                            mre_pauseToStart.WaitOne();
                         }
                     }
-                }
 
-                if (file == null)
-                {
-                    mre_addFile.WaitOne();
+                    if (file == null)
+                    {
+                        mre_addFile.WaitOne();
+                    }
                 }
             });
         }
