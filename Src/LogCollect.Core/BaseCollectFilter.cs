@@ -15,7 +15,15 @@ namespace D.DevelopTools.LogCollect
         protected Func<ICollectContext, bool> _output;
         protected Action<ICollectFilter> _empty;
 
-        protected FilterState State => _state;
+        protected FilterState State
+        {
+            get => _state;
+            set
+            {
+                _logger.LogInformation($"{this} state[{_state} => {value}]");
+                _state = value;
+            }
+        }
 
         #region ICollectFilter
         public string ID { get; protected set; }
@@ -45,10 +53,10 @@ namespace D.DevelopTools.LogCollect
             {
                 var isSuccess = true;
 
-                var old = _state;
-                _state = FilterState.Running;
+                var old = State;
+                State = FilterState.Running;
 
-                switch (_state)
+                switch (old)
                 {
                     case FilterState.Stop:
                         isSuccess = StopToRun();
@@ -74,10 +82,10 @@ namespace D.DevelopTools.LogCollect
             {
                 var isSuccess = true;
 
-                var old = _state;
-                _state = FilterState.Pause;
+                var old = State;
+                State = FilterState.Pause;
 
-                switch (_state)
+                switch (old)
                 {
                     case FilterState.Running:
                         isSuccess = RunToPause();
@@ -103,9 +111,10 @@ namespace D.DevelopTools.LogCollect
             {
                 var isSuccess = true;
 
-                _state = FilterState.Stop;
+                var old = State;
+                State = FilterState.Stop;
 
-                switch (_state)
+                switch (old)
                 {
                     case FilterState.Stop:
                         isSuccess = false;
@@ -163,6 +172,11 @@ namespace D.DevelopTools.LogCollect
         protected void NotiifyPipelineEmpty()
         {
             _empty(this);
+        }
+
+        public override string ToString()
+        {
+            return $"{Code}";
         }
     }
 }
