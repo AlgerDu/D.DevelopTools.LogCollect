@@ -21,6 +21,7 @@ namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
         ManualResetEvent mre_addContext;
 
         bool _isRunning;
+        bool _isFull;
 
         public override string Code => CCode;
 
@@ -32,6 +33,8 @@ namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
 
             _queue = new Queue<ICollectContext>(500);
             mre_addContext = new ManualResetEvent(false);
+
+            _isFull = false;
         }
 
         public override bool Init(ICollectFilterOptions options)
@@ -72,6 +75,8 @@ namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
             {
                 if (_queue.Count == 500)
                 {
+                    _isFull = true;
+                    _logger.LogInformation($"{this} 待发送的数据已经达到 500，管道开始堵塞");
                     return false;
                 }
 
@@ -93,17 +98,23 @@ namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
                     lock (this)
                     {
                         if (_queue.Count > 0)
-                            context = _queue.Dequeue();
-
-                        if (_queue.Count < 200)
                         {
+                            context = _queue.Dequeue();
+                            _logger.LogTrace($"{this} 队列缓存 {_queue.Count}");
+                        }
+
+                        if (_queue.Count < 200 && _isFull)
+                        {
+                            _isFull = false;
+                            _logger.LogInformation($"{this} 管道开始畅通");
                             Task.Run(() => this.NotiifyPipelineEmpty());
                         }
                     }
 
                     if (context != null)
                     {
-                        SendContext(context);
+                        //SendContext(context);
+                        System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(20));
                     }
 
                     if (context == null)
@@ -124,23 +135,26 @@ namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
             }
 
             var index = context.Fields[_options.Index];
-            var type = context.Fields[_options.Type].Replace('.', '_');
-            var url = $"http://{_options.Host}/logcollect_{index}/{type}";
+
+            if (string.IsNullOrEmpty(index))
+            {
+                return;
+            }
+            body["apptype"] = context.Fields[_options.Type];
+
+            var url = $"http://{_options.Host}/logcollect_{index}/_doc";
 
             var content = new StringContent(body.ToString());
             content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
             try
             {
-                _http.PostAsync(url, content).ContinueWith((t) =>
-                {
-                    var rsp = t.Result;
+                var t = _http.PostAsync(url, content);
+                t.Wait();
 
-                    _logger.LogInformation($"{index} {(int)rsp.StatusCode}");
+                var rsp = t.Result;
 
-                    _logger.LogDebug($"{rsp.RequestMessage.Headers.ToString()}");
-                    _logger.LogDebug($"{rsp.Headers.ToString()}");
-                });
+                _logger.LogInformation($"{url} StatusCode[{(int)rsp.StatusCode}]({rsp.Headers})({content.Headers})");
             }
             catch (Exception ex)
             {
