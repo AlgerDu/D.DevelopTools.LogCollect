@@ -7,6 +7,14 @@
     <RootNamespace>D.DevelopTools.LogCollect</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>E:\DProject\D.DevelopTools.LogCollect\bin\Debug\LogCollect.Shell.Console</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>E:\DProject\D.DevelopTools.LogCollect\bin\Release\LogCollect.Shell.Console</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="D.Extensions.Application.Autofac" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.0.0" />

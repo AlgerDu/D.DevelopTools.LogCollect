@@ -14,6 +14,12 @@ namespace D.DevelopTools.LogCollect
             var app = new ApplicationBuilder()
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
+                    if (args.Length == 2 && args[0] == "-content")
+                    {
+                        //暂时先写在这里吧，这个
+                        hostingContext.Environment.ContentRootPath = hostingContext.Environment.AppRootPath + args[1];
+                    }
+
                     config.SetBasePath(hostingContext.Environment.AppRootPath);
 
                     config.AddJsonFile("appSettings.json", optional: false, reloadOnChange: true);

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LogCollect.Shell.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "-content ../../../../Items/"
+    }
+  }
+}
