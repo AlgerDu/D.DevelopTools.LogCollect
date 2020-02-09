@@ -22,10 +22,12 @@ namespace D.DevelopTools.LogCollect
 
             _filterOptions = new List<ICollectFilterOptions>();
 
-            var tmp = _root.First;
+            var tmp = _root["filters"].First;
             while (tmp != null)
             {
-                _filterOptions.Add(new JsonCollectFilterOptions(_root[tmp.Path], tmp.Path));
+                var p = tmp as JProperty;
+
+                _filterOptions.Add(new JsonCollectFilterOptions(p.Value, p.Name));
 
                 tmp = tmp.Next;
             }
