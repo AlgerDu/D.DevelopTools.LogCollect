@@ -10,8 +10,21 @@ namespace D.DevelopTools.LogCollect
     /// </summary>
     public interface ICollectPipeline
     {
+        /// <summary>
+        /// 过滤器（已排序）
+        /// </summary>
+        IEnumerable<ICollectFilter> Filters { get; }
+
+        /// <summary>
+        /// 开始运行
+        /// </summary>
+        /// <returns></returns>
         bool Run();
 
+        /// <summary>
+        /// 停止运行
+        /// </summary>
+        /// <returns></returns>
         bool Stop();
     }
 }
