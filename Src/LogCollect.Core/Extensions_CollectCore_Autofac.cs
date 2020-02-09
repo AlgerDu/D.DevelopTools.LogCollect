@@ -14,6 +14,11 @@ namespace D.DevelopTools.LogCollect
                 .AsSelf()
                 .SingleInstance();
 
+            builder.RegisterType<CollectPipelineFactory>()
+                .As<ICollectPipelineFactory>()
+                .AsSelf()
+                .SingleInstance();
+
             return builder;
         }
     }
