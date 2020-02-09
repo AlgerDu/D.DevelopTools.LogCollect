@@ -12,6 +12,7 @@ namespace D.DevelopTools.LogCollect
     {
         /// <summary>
         /// 过滤器（已排序）
+        /// 怎么感觉不需要对外暴漏
         /// </summary>
         IEnumerable<ICollectFilter> Filters { get; }
 
