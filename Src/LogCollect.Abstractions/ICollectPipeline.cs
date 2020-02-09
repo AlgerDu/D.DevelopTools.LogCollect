@@ -10,5 +10,8 @@ namespace D.DevelopTools.LogCollect
     /// </summary>
     public interface ICollectPipeline
     {
+        bool Run();
+
+        bool Stop();
     }
 }
