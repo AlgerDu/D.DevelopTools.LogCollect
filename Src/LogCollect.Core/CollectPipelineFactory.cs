@@ -33,6 +33,7 @@ namespace D.DevelopTools.LogCollect
             {
                 var filter = _filterFactory.Create(options.FilterCode);
 
+                filter.Init(options);
                 filters.Add(index++, filter);
             }
 
