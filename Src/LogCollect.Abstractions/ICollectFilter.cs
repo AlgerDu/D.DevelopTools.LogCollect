@@ -21,16 +21,33 @@ namespace D.DevelopTools.LogCollect
         string Code { get; }
 
         /// <summary>
+        /// 状态
+        /// </summary>
+        CollectFilterState State { get; }
+
+        /// <summary>
         /// 初始化 filter
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
         bool Init(ICollectFilterOptions options);
 
+        /// <summary>
+        /// 启动 filter
+        /// </summary>
+        /// <returns></returns>
         bool Run();
 
+        /// <summary>
+        /// 暂停 filter
+        /// </summary>
+        /// <returns></returns>
         bool Pause();
 
+        /// <summary>
+        /// 停止 filter
+        /// </summary>
+        /// <returns></returns>
         bool Stop();
 
         /// <summary>
@@ -51,6 +68,13 @@ namespace D.DevelopTools.LogCollect
         /// 设置已空的处理
         /// </summary>
         /// <param name="emptyAction"></param>
+        [Obsolete]
         void SetEmpty(Action<ICollectFilter> emptyAction);
+
+        /// <summary>
+        /// 设置状态变更的处理；内部自行发生变化，才会发出通知；暂定
+        /// </summary>
+        /// <param name="stateChangedAction">filter;old state;new state</param>
+        void SetStateChanged(Action<ICollectFilter, CollectFilterState, CollectFilterState> stateChangedAction);
     }
 }

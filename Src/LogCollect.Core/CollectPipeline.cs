@@ -36,7 +36,7 @@ namespace D.DevelopTools.LogCollect
         {
             var count = _filters.Count;
 
-            for (var i = count - 1; i > 0; i--)
+            for (var i = count; i > 0; i--)
             {
                 _filters[i].Run();
             }
@@ -75,7 +75,7 @@ namespace D.DevelopTools.LogCollect
 
             last.SetEmpty((filter) =>
             {
-                filter.Run();
+                first.Run();
             });
         }
     }
