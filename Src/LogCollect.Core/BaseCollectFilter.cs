@@ -8,27 +8,27 @@ namespace D.DevelopTools.LogCollect
 {
     public abstract class BaseCollectFilter : ICollectFilter
     {
-        private FilterState _state;
+        private CollectFilterState _state;
 
         protected ILogger _logger;
 
-        protected Func<ICollectContext, bool> _output;
-        protected Action<ICollectFilter> _empty;
-
-        protected FilterState State
-        {
-            get => _state;
-            set
-            {
-                _logger.LogInformation($"{this} state[{_state} => {value}]");
-                _state = value;
-            }
-        }
+        private Func<ICollectContext, bool> _output;
+        private Action<ICollectFilter, CollectFilterState, CollectFilterState> _stateChanged;
 
         #region ICollectFilter
         public string ID { get; protected set; }
 
         public abstract string Code { get; }
+
+        public CollectFilterState State
+        {
+            get => _state;
+            private set
+            {
+                _logger.LogInformation($"{this} state[{_state} => {value}]");
+                _state = value;
+            }
+        }
         #endregion
 
         public BaseCollectFilter(
@@ -38,7 +38,7 @@ namespace D.DevelopTools.LogCollect
             _logger = logger;
 
             ID = Guid.NewGuid().ToString();
-            _state = FilterState.Stop;
+            _state = CollectFilterState.Stopped;
         }
 
         #region ICollectFilter
@@ -49,28 +49,27 @@ namespace D.DevelopTools.LogCollect
 
         public bool Run()
         {
+            if (State == CollectFilterState.Starting || State == CollectFilterState.Running)
+            {
+                LogCannotChangeState(CollectFilterState.Running);
+                return true;
+            }
+
             lock (this)
             {
-                var isSuccess = true;
+                State = CollectFilterState.Starting;
+                var isSuccess = false;
 
-                var old = State;
-                State = FilterState.Running;
-
-                switch (old)
+                try
                 {
-                    case FilterState.Stop:
-                        isSuccess = StopToRun();
-                        break;
-
-                    case FilterState.Pause:
-                        isSuccess = PauseToRun();
-                        break;
-
-                    default:
-                        break;
+                    isSuccess = StartFilter();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"{this} 启动出现异常：[{ex}]");
                 }
 
-                if (!isSuccess) _state = old;
+                State = isSuccess ? CollectFilterState.Running : CollectFilterState.Stopped;
 
                 return isSuccess;
             }
@@ -78,30 +77,17 @@ namespace D.DevelopTools.LogCollect
 
         public bool Pause()
         {
+            if (State != CollectFilterState.Running)
+            {
+                LogCannotChangeState(CollectFilterState.Stuck);
+                return false;
+            }
+
             lock (this)
             {
-                var isSuccess = true;
+                StackFilter();
 
-                var old = State;
-                State = FilterState.Pause;
-
-                switch (old)
-                {
-                    case FilterState.Running:
-                        isSuccess = RunToPause();
-                        break;
-
-                    case FilterState.Stop:
-                        isSuccess = false;
-                        break;
-
-                    default:
-                        break;
-                }
-
-                if (!isSuccess) _state = old;
-
-                return isSuccess;
+                return true;
             }
         }
 
@@ -144,6 +130,15 @@ namespace D.DevelopTools.LogCollect
         }
         #endregion
 
+        protected virtual bool StartFilter()
+        {
+            return true;
+        }
+
+        protected virtual void StackFilter()
+        {
+        }
+
         protected virtual bool StopToRun()
         {
             return true;
@@ -174,9 +169,30 @@ namespace D.DevelopTools.LogCollect
             _empty(this);
         }
 
+        protected void ChangeStateAndNotify(CollectFilterState newState)
+        {
+            var oldState = State;
+            State = newState;
+
+            if (_stateChanged != null)
+            {
+                _stateChanged(this, oldState, newState);
+            }
+        }
+
         public override string ToString()
         {
             return $"{Code}";
+        }
+
+        public void SetStateChanged(Action<ICollectFilter, CollectFilterState, CollectFilterState> stateChangedAction)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void LogCannotChangeState(CollectFilterState newState)
+        {
+            _logger.LogWarning($"{this} 不能从 [{State}] 变更为 [{newState}] 状态");
         }
     }
 }

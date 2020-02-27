@@ -22,6 +22,11 @@ namespace D.DevelopTools.LogCollect
         /// <summary>
         /// 运行中
         /// </summary>
-        Running
+        Running,
+
+        /// <summary>
+        /// 启动中
+        /// </summary>
+        Starting
     }
 }

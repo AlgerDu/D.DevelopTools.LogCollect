@@ -100,7 +100,7 @@ namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
                         if (_queue.Count > 0)
                         {
                             context = _queue.Dequeue();
-                            _logger.LogTrace($"{this} 队列缓存 {_queue.Count}");
+                            //_logger.LogTrace($"{this} 队列缓存 {_queue.Count}");
                         }
 
                         if (_queue.Count < 200 && _isFull)
@@ -140,6 +140,7 @@ namespace D.DevelopTools.LogCollect.Filters.Output.Elasticsearch
             {
                 return;
             }
+
             body["apptype"] = context.Fields[_options.Type];
 
             var url = $"http://{_options.Host}/logcollect_{index}/_doc";

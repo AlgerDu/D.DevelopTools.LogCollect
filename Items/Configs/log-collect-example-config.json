@@ -30,7 +30,8 @@
         },
         "tidy-fields": {
             "combine": {
-                "esindex": "product env project"
+                "esindex": "product env project",
+                "estype": "basefilename instanceid"
             },
             "rename": {
                 "message": "logmessage"
@@ -39,6 +40,7 @@
         "elasticsearch-output": {
             "host": "192.168.101.110:9200",
             "index": "esindex",
+            "type": "estype",
             "fields": [
                 "loglevel",
                 "logtimestamp",

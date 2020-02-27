@@ -134,12 +134,16 @@ namespace D.DevelopTools.LogCollect.Filters.Input.File
                                 mre_pauseToStart.WaitOne();
                             }
                         }
+
+                        _logger.LogInformation($"{file} 处理完成");
                     }
 
                     if (file == null)
                     {
                         mre_addFile.WaitOne();
                     }
+
+                    file = null;
                 }
             });
         }
