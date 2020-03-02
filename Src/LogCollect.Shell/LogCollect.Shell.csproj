@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>D.DevelopTools.LogCollect.Shell</AssemblyName>
+    <RootNamespace>D.DevelopTools.LogCollect</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="5.0.0" />
+    <PackageReference Include="D.Infrastructures.Application" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Filters\Filter.Output.Elasticsearch\Filter.Output.Elasticsearch.csproj" />
+    <ProjectReference Include="..\Filters\Filters.Input.File\Filters.Input.File.csproj" />
+    <ProjectReference Include="..\Filters\Filters.Regex\Filters.Regex.csproj" />
+    <ProjectReference Include="..\Filters\Filters.TidyFields\Filters.TidyFields.csproj" />
+    <ProjectReference Include="..\LogCollect.Abstractions\LogCollect.Abstractions.csproj" />
+    <ProjectReference Include="..\LogCollect.Core\LogCollect.Core.csproj" />
+  </ItemGroup>
+
+</Project>
